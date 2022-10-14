@@ -33,3 +33,5 @@ event_data = fromJSON(file.path(DATA_FOLDER, "item.json"))
 event_data = select(event_data, -c("img_urls", "thumb_url", "href"))
 
 suburb = st_read(file.path(DATA_FOLDER, "suburb.shp"))
+
+print(colnames(event_data))

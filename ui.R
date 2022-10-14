@@ -120,7 +120,8 @@ shinyUI(
                                height = "75px"), style = "padding-left:100px;"),
                id = "navbar",
                selected = "home",
-               theme = "styles.css", 
+               theme = "styles.css",
+               windowTitle = "Melbourne Discovery",
                fluid = T,
                ##-- navigation pages ----
                home,

@@ -7,13 +7,10 @@
 
 # The leaflet map object
 map <- NULL
-print("outside rendering functions")
-output$hoodInfo <- renderUI({
-  print("render UI")
-})
+print("start rendering")
 output$mymap <- renderLeaflet({
-  print("render map")
-  
+  print("rendering map")
+
   # Generate basemap
   map <- leaflet(event_data) %>%
     addTiles() %>%
@@ -25,17 +22,29 @@ output$mymap <- renderLeaflet({
   # addLegend(pal = pal,
   #           values = valByCountry$TargetByCountry,
   #           position = "bottomleft")
-  # addSidebar(map, id = "sidebar")
-  # openSidebar(map, "sidebar")
+
 })
 
+
+
+
+observeEvent(input$mymap_marker_click, {
+  event_name <- input$mymap_marker_click$id
+  # openSidebar(map, "home")
+  print(event_name)
+  print(10086)
+  title <- HTML(event_name)
+  event_data <- event_data %>%
+    filter(title == event_name)
+  output$contents <- renderUI({
+    print(123)
+    "contents"
+  })
+
+})
+  
+
 # 
-#   observeEvent(input$map_marker_click, {
-#     event_name <- input$map_marker_click$id
-#     # openSidebar(map, "home")
-#     # print(event_name)
-#   })
-# 
-#   observeEvent(input$map_click, {
+#   observeEvent(input$mymap_click, {
 #     # closeSidebar(map)
 #   })
