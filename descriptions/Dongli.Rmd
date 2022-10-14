@@ -1,0 +1,41 @@
+---
+output: 
+  html_fragment
+fontsize: 8pt
+---
+
+# Dongli He
+
+<!-- personal description -->
+<div class="col2">
+<img class="photo" src="img/Dongli.jpeg"/>
+
+<div class="description">
+
+### Description
+
+I'm responsible for UI design and event map.
+
+***
+
+### Skills
+
+* Web Design
+* Web Crawling
+* Data Visualization
+* Statistics
+
+***
+
+</div>
+
+<div align='right'>
+  <a href="https://www.linkedin.com/in/hedongli97/"> 
+    <i class="fa fa-linkedin" style='font-size:20px; margin: 0px 5px'></i>
+  </a>
+  <a href="https://github.com/Nanachihub/"> 
+    <i class="fa fa-github" style='font-size:20px; margin: 0px 5px'></i>
+  </a>
+</div>
+
+</div>

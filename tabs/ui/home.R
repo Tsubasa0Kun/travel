@@ -1,0 +1,203 @@
+################################################################################
+# UI of the home page
+#
+# Author: Dongli He
+# Created: 13/10/2022 17:01
+################################################################################
+
+home <- tabPanel(title = "Home",
+                 value = "home",
+                 column(width = 12, align = 'center',
+                        tags$head(
+                        # Note the wrapping of the string in HTML()
+                        tags$style(HTML(
+                        '* {
+                        margin: 0;
+                        padding: 0;
+                        }
+                        
+                        ul,
+                        li {
+                        list-style: none;
+                        }
+                        
+                        .slider-container {
+                        width: 100%;
+                        position: relative;
+                        margin: 0 auto;
+                        }
+                        
+                        .slider,
+                        .slider-item {
+                        padding-bottom: 40%;
+                        }
+                        
+                        .slider-item {
+                        position: absolute;
+                        width: 100%;
+                        background-size: 100%;
+                        animation: fade 20s linear;
+                        animation-iteration-count: infinite;
+                        }
+                        
+                        
+                        .slider-item1 {
+                        background-image: url(img/bg1.png);
+                        }
+                        
+                        .slider-item2 {
+                        background-image: url(img/bg2.png);
+                        }
+                        
+                        .slider-item3 {
+                        background-image: url(img/bg3.png);
+                        }
+                        
+                        .slider-item4 {
+                        background-image: url(img/bg4.png);
+                        }
+                        
+                        .slider-item5 {
+                        background-image: url(img/bg5.png);
+                        }
+                        
+                        @keyframes fade {
+                        0% {
+                        opacity: 0;
+                        }
+                        
+                        5% {
+                        opacity: 1;
+                        }
+                        
+                        20% {
+                        opacity: 1;
+                        }
+                        
+                        25% {
+                        opacity: 0;
+                        }
+                        
+                        100% {
+                        opacity: 0;
+                        }
+                        }
+                        
+                        .slider-item {
+                        opacity: 0;
+                        }
+                        
+                        .slider-item1 {
+                        animation-delay: -1s;
+                        }
+                        
+                        .slider-item2 {
+                        animation-delay: 3s;
+                        }
+                        
+                        .slider-item3 {
+                        animation-delay: 7s;
+                        }
+                        
+                        .slider-item4 {
+                        animation-delay: 11s;
+                        }
+                        
+                        .slider-item5 {
+                        animation-delay: 15s;
+                        }
+                        
+                        .focus-container {
+                        position: absolute;
+                        bottom: 2%;
+                        z-index: 7;
+                        left: 50%;
+                        margin-left: -45px;
+                        }
+                        
+                        .focus-container li {
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                        float: left;
+                        margin-right: 10px;
+                        background: #fff;
+                        }
+                        
+                        .focus-item {
+                        width: 100%;
+                        height: 100%;
+                        position: relative;
+                        opacity: 0;
+                        background: #51B1D9;
+                        border-radius: inherit;
+                        animation-duration: 20s;
+                        animation-timing-function: linear;
+                        animation-name: fade;
+                        animation-iteration-count: infinite;
+                        }
+                        
+                        .focus-item1 {
+                        animation-delay: -1s;
+                        }
+                        
+                        .focus-item2 {
+                        animation-delay: 3s;
+                        }
+                        
+                        .focus-item3 {
+                        animation-delay: 7s;
+                        }
+                        
+                        .focus-item4 {
+                        animation-delay: 11s;
+                        }
+                        
+                        .focus-item5 {
+                        animation-delay: 15s;
+                        }'))),
+                        
+                        tags$div(HTML(
+                        '<section class="slider-container">
+                        <ul class="slider">
+                        <li class="slider-item slider-item1"></li>
+                        <li class="slider-item slider-item2"></li>
+                        <li class="slider-item slider-item3"></li>
+                        <li class="slider-item slider-item4"></li>
+                        <li class="slider-item slider-item5"></li>
+                        </ul>
+                        <div class="focus-container">
+                        <ul class="floatfix">
+                        <li><div class="focus-item focus-item1"></div></li>
+                        <li><div class="focus-item focus-item2"></div></li>
+                        <li><div class="focus-item focus-item3"></div></li>
+                        <li><div class="focus-item focus-item4"></div></li>
+                        <li><div class="focus-item focus-item5"></div></li>
+                        </ul>
+                        </div>'))),
+                 
+                 hr(),
+                 br(), br(),
+                 HTML("<h1><center>WELCOME TO <b>MELBOURNE</b>!</center></h1>"),
+                 br(), br(), br(), br(),
+                 column(width = 3, align = "center",
+                        tab_format(texto = "General analysis", cor = cores[1], icon = "brasil.png", id = "analise_geral")
+                 ),
+                 column(width = 3, align = "center",
+                        tab_format(texto = "Party analysis", cor = cores[2], icon = "flag.png", id = "analise_partidos")
+                 ),
+                 column(width = 3, align = "center",
+                        tab_format(texto = "Candidates", cor = cores[3], icon = "person.png", id = "analise_candidatos")
+                 ),
+                 column(width = 3, align = "center",
+                        tab_format(texto = "About us", cor = cores[4], icon = "about.png", id = "about")
+                 ),
+                 column(width = 12,
+                        br(), br(), br(), br(),
+                        wellPanel(
+                          HTML("<h1><b>MELBOURNE Discovery</b></h1>"),
+                          HTML("<h4><b>MELBOURNE Discovery</b> application which help visitors in Melbourne by the usage of data science 
+                               .</h4>")
+                        )
+                 )
+)
