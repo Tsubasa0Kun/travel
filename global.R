@@ -9,7 +9,8 @@
 # "tidyr", "dplyr", "ggplot2"
 packages <- c("shiny", "shinyjs", "shinythemes", "shinydashboard", "plotly",
               "shinyWidgets", "shinycssloaders", "sf", "spData", "leaflet",
-              "leaflet.extras2", "tidyverse", "DT", "lubridate", "jsonlite"
+              "leaflet.extras", "leaflet.extras2", "tidyverse", "DT",
+              "lubridate", "jsonlite", "stringi"
               )
 
 # Install packages not yet installed
@@ -23,7 +24,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 source("functions/utils.R")
 cores <- c("#098ebb", "#fdc23a", "#e96449", "#818286")
 
-# turn off warning
+# Turn off warning
 # options(warn = -1)
 
 # Load data

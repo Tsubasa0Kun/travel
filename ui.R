@@ -112,7 +112,7 @@ shinyUI(
                         type="image/png" />'))),
     div(style="padding: 1px 0px; width: '100%'",
         titlePanel(
-          title="", windowTitle = "MELBOURNE EXPLORATION"
+          title="", windowTitle = "MELBOURNE DISCOVERY"
         )
     ),
     ##-- Header ----
@@ -128,9 +128,5 @@ shinyUI(
                map_container,
                about,
     ),
-    ##-- Footer ----
-    div(class = "footer",
-        includeHTML("html/footer.html"),
-    )
   )
 )

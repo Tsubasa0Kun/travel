@@ -195,8 +195,8 @@ home <- tabPanel(title = "Home",
                  column(width = 12,
                         br(), br(), br(), br(),
                         wellPanel(
-                          HTML("<h1><b>MELBOURNE Discovery</b></h1>"),
-                          HTML("<h4><b>MELBOURNE Discovery</b> application which help visitors in Melbourne by the usage of data science 
+                          HTML("<h1><b>MELBOURNE DISCOVERY</b></h1>"),
+                          HTML("<h4><b>MELBOURNE DISCOVERY</b> application which help visitors in Melbourne by the usage of data science 
                                .</h4>")
                         )
                  )
