@@ -8,22 +8,38 @@
 map_container <- tabPanel(title = "Map", 
                     value = "map_container",
                     hr(),
-                    # includeCSS("www/plugins/sidebar/css/leaflet-sidebar.css"),
-                    # includeCSS("www/plugins/sidebar/css/leaflet-sidebar.min.css"),
-                    # includeScript("www/plugins/sidebar/js/leaflet-sidebar.js"),
-                    # includeScript("www/plugins/sidebar/js/leaflet-sidebar.min.js"),
-                    div(class="outer",
-                        tags$style(HTML(
-                          "div.outer {
-                          position: fixed;
-                          top: 146px;
-                          left: 0;
-                          right: 0;
-                          bottom: 0;
-                          overflow: hidden;
-                          padding: 0;
-                          }")),
-                        leafletOutput("mymap", width="100%", height="100%")),
+                    fluidRow(
+                      column(3, align="center",
+                             checkboxInput(inputId = "eatingout", label = "Eating Out", value = TRUE),
+                             actionButton("filterForEatingout", "filter")
+                      ),
+                      
+                      column(3, align="center",
+                             checkboxInput(inputId = "hotels", label = "Hotels", value = TRUE),
+                             actionButton("filterForHotels", "filter")
+                      ),
+                      column(3, align="center",
+                             checkboxInput(inputId = "events", label = "Events", value = TRUE),
+                             actionButton("filterForEvents", "filter")
+                      ),
+                      column(3, align="center",
+                             checkboxInput(inputId = "attractions", label = "Attractions", value = TRUE),
+                             actionButton("filterForAttractions", "filter")
+                      ),
+                    ),
+                    hr(),
+                  div(class="outer",
+                      tags$style(HTML(
+                        "div.outer {
+                        position: fixed;
+                        top: 256px;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        overflow: hidden;
+                        padding: 0;
+                        }")),
+                      leafletOutput("mymap", width="100%", height="100%")),
 
                     absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
                                   draggable = TRUE, top = 260, left = 20, right = "auto", bottom = "auto",

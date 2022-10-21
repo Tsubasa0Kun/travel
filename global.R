@@ -27,12 +27,24 @@ cores <- c("#098ebb", "#fdc23a", "#e96449", "#818286")
 # Turn off warning
 # options(warn = -1)
 
-# Load data
+## Load data
+# Event data
 DATA_FOLDER = "data"
 
-event_data = fromJSON(file.path(DATA_FOLDER, "item.json"))
-event_data = select(event_data, -c("img_urls", "thumb_url", "href"))
+event_data <- fromJSON(file.path(DATA_FOLDER, "item.json"))
+event_data <- select(event_data, -c("img_urls", "thumb_url", "href"))
 
-suburb = st_read(file.path(DATA_FOLDER, "suburb.shp"))
+# Eating and hotels
+eatingout <- read.csv(file.path(DATA_FOLDER, "eatingout.csv"))
+hotels <- read.csv(file.path(DATA_FOLDER, "hotels.csv"))
 
-print(colnames(event_data))
+# Flight
+dataTable <- read.table("~/travel/data/futureFlightData.csv", header = TRUE, fill = TRUE, sep=",")
+print(dataTable)
+# Suburb
+suburb <- st_read(file.path(DATA_FOLDER, "suburb.shp"))
+
+# Icons
+EventIcon <- makeIcon(file.path("data", "icons", "Events1.png"), iconWidth=50, iconHeight=50)
+EatingIcon <- makeIcon(file.path("data", "icons", "Eatings1.png"), iconWidth=50, iconHeight=50)
+HotelIcon <- makeIcon(file.path("data", "icons", "Hotels1.png"), iconWidth=50, iconHeight=50)

@@ -8,14 +8,38 @@
 # The leaflet map object
 map <- NULL
 
-output$mymap <- renderLeaflet({
 
+ifEatingout <- reactive({
+  res <- ifelse(input$eatingout, 1, 0)
+})
+
+ifHotel <- reactive({
+  res <- ifelse(input$hotels, 1, 0)
+})
+
+
+eatingFilter <- reactive({
+  filter1 <- data.frame(filter(eatingout, FALSE))
+  for (eatingTag in input$EatingTags)
+  {
+    filter1 <- union(filter1, filter(eatingout, eatingout[eatingTag] == 1))
+  }
+  
+  filter2 <- filter(filter1, price %in% input$Price)
+  
+  filter3 <- data.frame(filter(filter2, FALSE))
+  for(eatingScore in input$Score)
+  {
+    filter3 <- union(filter3, filter(filter2, score >= strtoi(eatingScore), score < strtoi(eatingScore) + 1))
+  }
+  filter3
+})
+
+output$mymap <- renderLeaflet({
+  
   # Generate basemap
-  map <- leaflet(event_data) %>%
+  map <- leaflet() %>%
     addTiles() %>%
-    addMarkers(layerId=~title, lng=~longitude, lat=~latitude, popup=~title,
-               # clusterOptions=markerClusterOptions()
-               ) %>%
     
     # leaflet::addControl(html = sidebar_HTML, position = "topright") %>%
     
@@ -33,11 +57,13 @@ output$mymap <- renderLeaflet({
     
     leaflet.extras::addFullscreenControl() %>%
     
+    setView(lng = 145, lat = -37.811722, zoom = 10) %>%
+    
     leaflet::addEasyButton(
       easyButton(
         icon = icon("location-arrow"),
         title = "Reset Zoom",
-        onClick = JS(c("function(btn, map) {map.setView(new L.LatLng(-37.81, 144.96), 13);}"))
+        onClick = JS(c("function(btn, map) {map.setView(new L.LatLng(-37.81, 144.96), 10);}"))
       )
     ) %>%
     
@@ -47,6 +73,9 @@ output$mymap <- renderLeaflet({
       minimized = TRUE,
       position = "bottomleft")# %>%
     
+    map <- addMarkers(map, data = event_data, layerId = ~title, lng = ~longitude, lat = ~latitude,
+                      clusterOptions=markerClusterOptions(), icon = EventIcon, group = "events")
+  
     # Add the control widget
     # leaflet::addLayersControl(overlayGroups = c(
     #   "<img src = 'iconno.png' height = '12' width = '31'> Response vessels",
@@ -67,8 +96,31 @@ output$mymap <- renderLeaflet({
   #           values = valByCountry$TargetByCountry,
   #           position = "bottomleft")
 
+  if(ifHotel())
+  {
+    map <- addMarkers(map, data = hotels, layerId=~name, lng=~longitude, lat=~latitude,
+                      clusterOptions=markerClusterOptions(), icon = HotelIcon, group = "hotels")
+  }
+
+
+  if(ifEatingout())
+  {
+    map <- addMarkers(map, data = eatingout, layerId=~name, lng=~longitude, lat=~latitude,
+                      clusterOptions=markerClusterOptions(), icon = EatingIcon, group = "eatingout")
+  }
+  
+  map
+  
 })
 
+observeEvent(input$filterForEatingout, {
+  showModal(modalDialog(
+    title = "Somewhat important message",
+    "This is a somewhat important message.",
+    easyClose = TRUE,
+    footer = NULL
+  ))
+})
 
 observeEvent(input$mymap_marker_click, {
   event_name <- input$mymap_marker_click$id

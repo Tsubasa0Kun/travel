@@ -9,6 +9,8 @@
 shinyServer(function(input, output, session){
   ##-- HOME ----
   source("tabs/server/home.R", local = TRUE)
+  ##-- FLIGHT ----
+  source("tabs/server/flight.R", local = TRUE)
   ##-- MAP ----
   source("tabs/server/map.R", local = TRUE)
   ##-- ABOUT ----

@@ -125,6 +125,7 @@ shinyUI(
                fluid = T,
                ##-- navigation pages ----
                home,
+               airline_info_container,
                map_container,
                about,
     ),
