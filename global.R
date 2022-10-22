@@ -65,3 +65,8 @@ eatingPriceSelected <- c("cheap", "medium", "expensive")
 #global var for hotels filters
 hotelsScoreSelected <- c(0, 1, 2, 3, 4)
 hotelsPriceSelected <- c("cheap", "medium", "expensive")
+
+
+#global var for events filters
+eventsHeadingSelected <- c("Theatre", "Festivals", "Exhibitions", "Live music and gigs", "Expos", "Sport", "Family events")
+eventsMonthSelected <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")

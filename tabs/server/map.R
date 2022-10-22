@@ -82,6 +82,31 @@ hotelsFilter <- reactive({
   filter3
 })
 
+eventsFilter <- reactive({
+  eventsHeadingSelected <<- input$EventHeading
+  eventsMonthSelected <<- input$EventMonth
+  if(is.null(eventsHeadingSelected))
+  {
+    eventsHeadingSelected <<- c("Theatre", "Festivals", "Exhibitions", "Live music and gigs", "Expos", "Sport", "Family events")
+    updateCheckboxGroupInput(session, "EventHeading", selected = eventsHeadingSelected)
+  }
+  
+  if(is.null(eventsMonthSelected))
+  {
+    eventsMonthSelected <<- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    updateCheckboxGroupInput(session, "EventMonth", selected = eventsMonthSelected)
+  }
+  
+  filter1 <- data.frame(filter(event_data, FALSE))
+  for (eventMonth in eventsMonthSelected)
+  {
+    filter1 <- union(filter1, filter(event_data, event_data[eventMonth] == 1))
+  }
+  
+  filter2 <- filter(filter1, heading %in% eventsHeadingSelected)
+  filter2
+})
+
 
 output$mymap <- renderLeaflet({
   
@@ -126,7 +151,7 @@ output$mymap <- renderLeaflet({
   
   if(ifEvent())
   {
-    map <- addMarkers(map, data = event_data, layerId = ~title, lng = ~longitude, lat = ~latitude,
+    map <- addMarkers(map, data = eventsFilter(), layerId = ~title, lng = ~longitude, lat = ~latitude,
                       clusterOptions=markerClusterOptions(), icon = EventIcon, group = "events")
   }
   # Add the control widget
@@ -216,6 +241,28 @@ observeEvent(input$filterForHotels, {
   ))
 })
 
+
+observeEvent(input$filterForEvents, {
+  showModal(modalDialog(
+    checkboxGroupInput(
+      label = "Heading",
+      inputId = "EventHeading",
+      choices = c("Theatre", "Festivals", "Exhibitions", "Live music and gigs", "Expos", "Sport", "Family events"),
+      selected = eventsHeadingSelected
+    ),
+    checkboxGroupInput(
+      label = "Month",
+      inputId = "EventMonth",
+      choices = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+      selected = eventsMonthSelected
+    ),
+    easyClose = TRUE,
+    footer = fluidRow(align="center",
+                      actionButton("modalHide", "Hide"),
+    )
+  ))
+})
+
 observeEvent(input$modalHide, {
   removeModal()
 })
@@ -251,6 +298,7 @@ observeEvent(input$mymap_marker_click, {
           ".line-break {
         white-space: pre-line;
         }")),
+        h3("Eating out"),
         img(src=paste0(data$images), align = "center"),
         h4("Name"),
         p(name),
@@ -277,6 +325,7 @@ observeEvent(input$mymap_marker_click, {
           ".line-break {
         white-space: pre-line;
         }")),
+        h3("Hotel"),
         img(src=paste0(data$images), align = "center"),
         h4("Name"),
         p(name),
@@ -299,9 +348,12 @@ observeEvent(input$mymap_marker_click, {
           ".line-break {
         white-space: pre-line;
         }")),
+        h3("Event"),
         img(src=paste0("img/event_images/", data$thumb_path), align = "center"),
         h4("Name"),
         p(name),
+        h4("Heading"),
+        p(data$heading),
         h4("Description"),
         p(data$summary),
         h4("Location"),
@@ -309,6 +361,8 @@ observeEvent(input$mymap_marker_click, {
           stri_join_list(data$location, "")),
         h4("Price"),
         p(stri_join_list(data$price, "")),
+        h4("Time"),
+        p(data$from_to_date)
       )
     })
   }

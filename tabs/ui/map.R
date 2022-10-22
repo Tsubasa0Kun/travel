@@ -43,7 +43,7 @@ map_container <- tabPanel(title = "Map",
 
                     absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
                                   draggable = TRUE, top = 260, left = 20, right = "auto", bottom = "auto",
-                                  width = 330, height = "auto",
+                                  width = 330, height = "auto", 
 
                                   # selectInput("color", "Color", vars),
                                   # selectInput("size", "Size", vars, selected = "adultpop"),
