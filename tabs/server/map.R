@@ -193,6 +193,8 @@ output$mymap <- renderLeaflet({
 
 observeEvent(input$filterForEatingout, {
   showModal(modalDialog(
+    h3("Eating out"),
+    hr(),
     checkboxGroupInput(
       label = "Score",
       inputId = "EatingScore",
@@ -221,6 +223,8 @@ observeEvent(input$filterForEatingout, {
 
 observeEvent(input$filterForHotels, {
   showModal(modalDialog(
+    h3("Hotels"),
+    hr(),
     checkboxGroupInput(
       label = "Score",
       inputId = "HotelsScore",
@@ -244,6 +248,8 @@ observeEvent(input$filterForHotels, {
 
 observeEvent(input$filterForEvents, {
   showModal(modalDialog(
+    h3("Events"),
+    hr(),
     checkboxGroupInput(
       label = "Heading",
       inputId = "EventHeading",
