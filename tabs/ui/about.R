@@ -11,5 +11,5 @@ about <- tabPanel(title = "About us",
                   
                   includeHTML(rmarkdown::render('descriptions/Dongli.Rmd')), br(),
                   
-                  # includeHTML(rmarkdown::render('descricoes/xxx.Rmd')), br(),
+                  #includeHTML(rmarkdown::render('descricoes/LouhaoFang.Rmd')), br(),
 )

@@ -1,0 +1,40 @@
+---
+output: 
+  html_fragment
+fontsize: 8pt
+---
+
+# Louhao Fang
+
+<!-- personal description -->
+<div class="col2">
+<img class="photo" src="img/myFrog.png"/>
+
+<div class="description">
+
+### Description
+
+I'm responsible for interaction, filter and icons in map.
+
+***
+
+### Skills
+
+* Web Design
+* Data Visualization
+* Statistics
+
+***
+
+</div>
+
+<div align='right'>
+  <a href="https://www.linkedin.com/in/louhao-fang-b95882247/"> 
+    <i class="fa fa-linkedin" style='font-size:20px; margin: 0px 5px'></i>
+  </a>
+  <a href="https://github.com/Fanglouhao"> 
+    <i class="fa fa-github" style='font-size:20px; margin: 0px 5px'></i>
+  </a>
+</div>
+
+</div>
