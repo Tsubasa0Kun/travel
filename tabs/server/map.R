@@ -17,28 +17,77 @@ ifHotel <- reactive({
   res <- ifelse(input$hotels, 1, 0)
 })
 
+ifEvent <- reactive({
+  res <- ifelse(input$events, 1, 0)
+})
+
 
 eatingFilter <- reactive({
+  eatingTagsSelected <<- input$EatingTags
+  eatingScoreSelected <<- input$EatingScore
+  eatingPriceSelected <<- input$EatingPrice
+  if(is.null(eatingTagsSelected))
+  {
+    eatingTagsSelected <<- c('breakfast', 'lunch', 'dinner', 'drinks', 'coffee', 'icecream')
+    updateCheckboxGroupInput(session, "EatingTags", selected = eatingTagsSelected)
+  }
+  if(is.null(eatingScoreSelected))
+  {
+    eatingScoreSelected <<- c(0, 1, 2, 3, 4)
+    updateCheckboxGroupInput(session, "EatingScore", selected = eatingScoreSelected)
+  }
+  if(is.null(eatingPriceSelected))
+  {
+    eatingPriceSelected <<- c("cheap", "medium", "expensive")
+    updateCheckboxGroupInput(session, "EatingPrice", selected = eatingPriceSelected)
+  }
+  
   filter1 <- data.frame(filter(eatingout, FALSE))
-  for (eatingTag in input$EatingTags)
+  for (eatingTag in eatingTagsSelected)
   {
     filter1 <- union(filter1, filter(eatingout, eatingout[eatingTag] == 1))
   }
   
-  filter2 <- filter(filter1, price %in% input$Price)
+  filter2 <- filter(filter1, price %in% eatingPriceSelected)
   
   filter3 <- data.frame(filter(filter2, FALSE))
-  for(eatingScore in input$Score)
+  for(eatingScore in eatingScoreSelected)
   {
     filter3 <- union(filter3, filter(filter2, score >= strtoi(eatingScore), score < strtoi(eatingScore) + 1))
   }
   filter3
 })
 
+hotelsFilter <- reactive({
+  hotelsScoreSelected <<- input$HotelsScore
+  hotelsPriceSelected <<- input$HotelsPrice
+  if(is.null(hotelsScoreSelected))
+  {
+    hotelsScoreSelected <<- c(0, 1, 2, 3, 4)
+    updateCheckboxGroupInput(session, "HotelsScore", selected = hotelsScoreSelected)
+  }
+  if(is.null(hotelsPriceSelected))
+  {
+    hotelsPriceSelected <<- c("cheap", "medium", "expensive")
+    updateCheckboxGroupInput(session, "HotelsPrice", selected = hotelsPriceSelected)
+  }
+  
+  filter2 <- filter(hotels, price %in% hotelsPriceSelected)
+  
+  filter3 <- data.frame(filter(filter2, FALSE))
+  for(hotelScore in hotelsScoreSelected)
+  {
+    filter3 <- union(filter3, filter(filter2, score >= strtoi(hotelScore), score < strtoi(hotelScore) + 1))
+  }
+  filter3
+})
+
+
 output$mymap <- renderLeaflet({
   
+  
   # Generate basemap
-  map <- leaflet() %>%
+  map <- leaflet(options = leafletOptions(doubleClickZoom= FALSE)) %>%
     addTiles() %>%
     
     # leaflet::addControl(html = sidebar_HTML, position = "topright") %>%
@@ -51,13 +100,15 @@ output$mymap <- renderLeaflet({
     #     autopan: false,
     #     position: 'right',
     #     container: 'sidebar',
-    #     closeButton: true
-    #     }).addTo(map).open('home');
-    #     }")) %>%
-    
-    leaflet.extras::addFullscreenControl() %>%
+  #     closeButton: true
+  #     }).addTo(map).open('home');
+  #     }")) %>%
+  
+  leaflet.extras::addFullscreenControl() %>%
     
     setView(lng = 145, lat = -37.811722, zoom = 10) %>%
+    
+    addMapPane("Selected", zIndex = 1000) %>%
     
     leaflet::addEasyButton(
       easyButton(
@@ -72,22 +123,24 @@ output$mymap <- renderLeaflet({
       toggleDisplay = TRUE,
       minimized = TRUE,
       position = "bottomleft")# %>%
-    
+  
+  if(ifEvent())
+  {
     map <- addMarkers(map, data = event_data, layerId = ~title, lng = ~longitude, lat = ~latitude,
                       clusterOptions=markerClusterOptions(), icon = EventIcon, group = "events")
-  
-    # Add the control widget
-    # leaflet::addLayersControl(overlayGroups = c(
-    #   "<img src = 'iconno.png' height = '12' width = '31'> Response vessels",
-    #   "<img src = 'icondisper.png' height = '12' width = '31'> Response vessels with dispersants",
-    #   "<img src = 'iconstock.png' height = '10' width = '31'> Dispersant stockpile",
-    #   "<img src = 'iconeas.png' height = '13' width = '31'> EAS stockpile",
-    #   "<img src = 'iconeumembers.png' height = '15' width = '31'> EU member countries",
-    #   "<img src = 'iconeucandidates.png' height = '15' width = '31'> EU candidate countries",
-    #   "<img src = 'iconeuefta.png' height = '15' width = '31'> EEU/EFTA coastal countries"),                       
-    #   baseGroups = c("Map 1", "Map 2"), 
-    #   options = markerOptions(riseOnHover = TRUE),
-    #   position = "topright")
+  }
+  # Add the control widget
+  # leaflet::addLayersControl(overlayGroups = c(
+  #   "<img src = 'iconno.png' height = '12' width = '31'> Response vessels",
+  #   "<img src = 'icondisper.png' height = '12' width = '31'> Response vessels with dispersants",
+  #   "<img src = 'iconstock.png' height = '10' width = '31'> Dispersant stockpile",
+  #   "<img src = 'iconeas.png' height = '13' width = '31'> EAS stockpile",
+  #   "<img src = 'iconeumembers.png' height = '15' width = '31'> EU member countries",
+  #   "<img src = 'iconeucandidates.png' height = '15' width = '31'> EU candidate countries",
+  #   "<img src = 'iconeuefta.png' height = '15' width = '31'> EEU/EFTA coastal countries"),                       
+  #   baseGroups = c("Map 1", "Map 2"), 
+  #   options = markerOptions(riseOnHover = TRUE),
+  #   position = "topright")
   # openSidebar(map, "home", "sidebar")
   # addSidebar(map, id = "sidebar", options = list(position = "left"))
   # openSidebar(map, sidebar)
@@ -95,17 +148,17 @@ output$mymap <- renderLeaflet({
   # addLegend(pal = pal,
   #           values = valByCountry$TargetByCountry,
   #           position = "bottomleft")
-
+  
   if(ifHotel())
   {
-    map <- addMarkers(map, data = hotels, layerId=~name, lng=~longitude, lat=~latitude,
+    map <- addMarkers(map, data = hotelsFilter(), layerId=~name, lng=~longitude, lat=~latitude,
                       clusterOptions=markerClusterOptions(), icon = HotelIcon, group = "hotels")
   }
-
-
+  
+  
   if(ifEatingout())
   {
-    map <- addMarkers(map, data = eatingout, layerId=~name, lng=~longitude, lat=~latitude,
+    map <- addMarkers(map, data = eatingFilter(), layerId=~name, lng=~longitude, lat=~latitude,
                       clusterOptions=markerClusterOptions(), icon = EatingIcon, group = "eatingout")
   }
   
@@ -115,39 +168,154 @@ output$mymap <- renderLeaflet({
 
 observeEvent(input$filterForEatingout, {
   showModal(modalDialog(
-    title = "Somewhat important message",
-    "This is a somewhat important message.",
+    checkboxGroupInput(
+      label = "Score",
+      inputId = "EatingScore",
+      choiceNames = c('0~1', '1~2', '2~3', '3~4', '4~5'),
+      choiceValue = c(0, 1, 2, 3, 4),
+      selected = eatingScoreSelected
+    ),
+    checkboxGroupInput(
+      label = "Tags",
+      inputId = "EatingTags",
+      choices = c('breakfast', 'lunch', 'dinner', 'drinks', 'coffee', 'icecream'),
+      selected = eatingTagsSelected
+    ),
+    checkboxGroupInput(
+      label = "Price",
+      inputId = "EatingPrice",
+      choices = c("cheap", "medium", "expensive"),
+      selected = eatingPriceSelected
+    ),
     easyClose = TRUE,
-    footer = NULL
+    footer = fluidRow(align="center",
+                      actionButton("modalHide", "Hide"),
+    )
   ))
 })
 
-observeEvent(input$mymap_marker_click, {
-  event_name <- input$mymap_marker_click$id
-  # openSidebar(map, "home")
-  print(event_name)
+observeEvent(input$filterForHotels, {
+  showModal(modalDialog(
+    checkboxGroupInput(
+      label = "Score",
+      inputId = "HotelsScore",
+      choiceNames = c('0~1', '1~2', '2~3', '3~4', '4~5'),
+      choiceValue = c(0, 1, 2, 3, 4),
+      selected = hotelsScoreSelected
+    ),
+    checkboxGroupInput(
+      label = "Price",
+      inputId = "HotelsPrice",
+      choices = c("cheap", "medium", "expensive"),
+      selected = hotelsPriceSelected
+    ),
+    easyClose = TRUE,
+    footer = fluidRow(align="center",
+                      actionButton("modalHide", "Hide"),
+    )
+  ))
+})
 
-  event_data <- event_data %>%
-    filter(title == event_name)
+observeEvent(input$modalHide, {
+  removeModal()
+})
+
+
+
+observeEvent(input$mymap_marker_click, {
   
-  output$contents <- renderUI({
-    div(
-      tags$style(HTML(
-        ".line-break {
+  click <- input$mymap_marker_click
+  if(is.null(click))
+    return()
+  
+  if (click$id == "Selected")
+  {
+    leafletProxy("mymap") %>%
+      clearGroup("Selected")
+    return()
+  }
+  
+  first_char <- substr(click$id, 1, 1)
+  data <- NULL
+  icon <- NULL
+  name <- substr(click$id, 2, nchar(click$id))
+  if (first_char == "1")
+  {
+    data <- filter(eatingout, name == click$id)
+    icon <- EatingIconBig
+    eatingTags <- toString(unlist(str_split(substr(data$Tags, 3, nchar(data$Tags) - 2), "', '")))
+    cuisines <- toString(unlist(str_split(substr(data$cuisine, 3, nchar(data$cuisine) - 2), "', '")))
+    output$contents <- renderUI({
+      div(
+        tags$style(HTML(
+          ".line-break {
         white-space: pre-line;
         }")),
-      img(src=paste0("img/event_images/", event_data$thumb_path), align = "center"),
-      h4("Title"),
-      p(event_name),
-      h4("Description"),
-      p(event_data$summary),
-      h4("Location"),
-      p(class = "line-break",
-        stri_join_list(event_data$location, "")),
-      h4("Price"),
-      p(stri_join_list(event_data$price, "")),
-    )
-  })
+        img(src=paste0(data$images), align = "center"),
+        h4("Name"),
+        p(name),
+        h4("Tags"),
+        p(eatingTags),
+        h4("Cuisine"),
+        p(cuisines),
+        h4("Description"),
+        p(data$intro),
+        h4("Price"),
+        p(data$price),
+        h4("attribution"),
+        p(data$attribution)
+        )
+    })
+  }
+  else if(first_char == "2")
+  {
+    data <- filter(hotels, name == click$id)
+    icon <- HotelIconBig
+    output$contents <- renderUI({
+      div(
+        tags$style(HTML(
+          ".line-break {
+        white-space: pre-line;
+        }")),
+        img(src=paste0(data$images), align = "center"),
+        h4("Name"),
+        p(name),
+        h4("Description"),
+        p(data$intro),
+        h4("Price"),
+        p(data$price),
+        h4("attribution"),
+        p(data$attribution)
+      )
+    })
+  }
+  else if(first_char == "3")
+  {
+    data <- filter(event_data, title == click$id)
+    icon <- EventIconBig
+    output$contents <- renderUI({
+      div(
+        tags$style(HTML(
+          ".line-break {
+        white-space: pre-line;
+        }")),
+        img(src=paste0("img/event_images/", data$thumb_path), align = "center"),
+        h4("Name"),
+        p(name),
+        h4("Description"),
+        p(data$summary),
+        h4("Location"),
+        p(class = "line-break",
+          stri_join_list(data$location, "")),
+        h4("Price"),
+        p(stri_join_list(data$price, "")),
+      )
+    })
+  }
+  
+  leafletProxy("mymap") %>%
+    addMarkers(layerId="Selected", lng=click$lng, lat=click$lat, icon = icon, group = "Selected",  options = pathOptions(pane = "Selected"))
+    
 })
   
 # sidebar_HTML <- tags$div(HTML('

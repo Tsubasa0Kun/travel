@@ -32,7 +32,7 @@ map_container <- tabPanel(title = "Map",
                       tags$style(HTML(
                         "div.outer {
                         position: fixed;
-                        top: 256px;
+                        top: 259px;
                         left: 0;
                         right: 0;
                         bottom: 0;
