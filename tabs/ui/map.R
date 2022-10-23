@@ -41,18 +41,12 @@ map_container <- tabPanel(title = "Map",
                         }")),
                       leafletOutput("mymap", width="100%", height="100%")),
 
-                    absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
-                                  draggable = TRUE, top = 260, left = 20, right = "auto", bottom = "auto",
-                                  width = 330, height = "auto", 
-
-                                  # selectInput("color", "Color", vars),
-                                  # selectInput("size", "Size", vars, selected = "adultpop"),
-                                  # conditionalPanel("input.color == 'superzip' || input.size == 'superzip'",
-                                  #                  # Only prompt for threshold when coloring or sizing by superzip
-                                  #                  numericInput("threshold", "SuperZIP threshold (top n percentile)", 5)
-                                  # ),
-                                  #
-                                  uiOutput("contents"),
+                    absolutePanel(
+                      id = "popup_panel", class = "panel panel-default",
+                      fixed = FALSE, draggable = TRUE, top = 260, left = "auto",
+                      right = "0", bottom = "auto", width = 330,
+                      height = "auto", style = "overflow-y: auto;",
+                      uiOutput("contents"),
                     ),
 )
                     

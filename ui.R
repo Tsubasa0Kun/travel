@@ -98,6 +98,8 @@
 
 shinyUI(
   fluidPage(
+    # Set up shinyjs
+    useShinyjs(),
     ##-- icon ----
     tags$head(
       tags$link(rel = "shortcut icon", href = "img/logo.ico"),
